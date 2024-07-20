@@ -7,5 +7,6 @@ export const createLoginResponseDtoToEntityAdapter = (
   return {
     token: response.access_token,
     name: response.name,
+    id: response.id,
   };
 };

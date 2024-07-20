@@ -1,6 +1,6 @@
 export interface UserFormEntity {
   name: string;
-  lastName: string;
+  lastname: string;
   email: string;
   username: string;
 }
