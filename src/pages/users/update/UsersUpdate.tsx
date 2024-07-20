@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { UsersUpdateContext } from "./context/UsersUpdate.context";
+import { UsersUpdateForm } from "./components/UsersUpdateForm/UsersUpdateForm";
 
 export const UsersUpdate = () => {
   const [loading, setLoading] = useState(false);
@@ -10,6 +11,8 @@ export const UsersUpdate = () => {
         loading,
         setLoading,
       }}
-    ></UsersUpdateContext.Provider>
+    >
+      <UsersUpdateForm />
+    </UsersUpdateContext.Provider>
   );
 };
