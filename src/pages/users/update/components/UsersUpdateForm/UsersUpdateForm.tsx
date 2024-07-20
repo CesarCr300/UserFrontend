@@ -34,11 +34,14 @@ export const UsersUpdateForm = () => {
   useFillUserForm({ reset, callEndpoint });
 
   return (
-    <FormContainer
-      onSubmit={handleSubmit(onSubmit)}
-      fields={useMemo(() => getUsersUpdateFormFields(register), [])}
-    >
-      <Button text="Guardar" type="submit" />
-    </FormContainer>
+    <div>
+      <h2>Datos generales</h2>
+      <FormContainer
+        onSubmit={handleSubmit(onSubmit)}
+        fields={useMemo(() => getUsersUpdateFormFields(register), [])}
+      >
+        <Button text="Guardar" type="submit" />
+      </FormContainer>
+    </div>
   );
 };
