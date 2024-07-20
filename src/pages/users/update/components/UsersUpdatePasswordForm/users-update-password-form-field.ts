@@ -1,4 +1,4 @@
-import { UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 import { IFormFieldRender } from "../../../../../components/Form/FormFieldsRender";
 
@@ -14,6 +14,9 @@ export const getUsersUpdatePasswordFormFields = (
       type: "password",
       register,
       hasAsyncronousDefaultValue: false,
+      registerOptions: {
+        required: "La contraseña original es requerida",
+      },
     },
     {
       label: "Contraseña nueva",
@@ -21,6 +24,13 @@ export const getUsersUpdatePasswordFormFields = (
       type: "password",
       register,
       hasAsyncronousDefaultValue: false,
+      registerOptions: {
+        required: "La nueva contraseña es requerida",
+        minLength: {
+          value: 6,
+          message: "La nueva contraseña debe tener al menos 6 caracteres",
+        },
+      },
     },
   ];
 };
