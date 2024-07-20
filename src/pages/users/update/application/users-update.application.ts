@@ -7,8 +7,6 @@ import {
   createPopUpSimple,
 } from "../../../../utils/pop-up.util";
 
-import { UserResponseDto } from "../../../../dtos/user-response.dto";
-import { UserUpdateDto } from "../../../../dtos/user-update.dto";
 import { usersService } from "../../../../services/users.service";
 import { fromUserFormEntityToUserUpdateDtoAdapter } from "../../adapters/from-user-form-entity-to-user-update-dto.adapter";
 import { fromUserResponseDtoToUserFormEntityAdapter } from "../../adapters/from-user-response-dto-to-user-form-entity.adapter";
@@ -16,33 +14,7 @@ import { UserFormEntity } from "../entities/user-form.entity";
 import { UserFormPasswordEntity } from "../entities/user-form-password.entity";
 import { UserUpdatePasswordDto } from "../../../../dtos/user-update-password.dto";
 import { fromUserFormPasswordEntityToUserUpdatePasswordDtoAdapter } from "../../adapters/from-user-form-password-entity-to-user-update-password-dto.adapter";
-
-export const fillUserForm = async (
-  id: number,
-  reset: UseFormReset<UserFormEntity>,
-  callEndpoint: (
-    axiosCall: AxiosCall<UserResponseDto>
-  ) => Promise<AxiosResponse<UserResponseDto, any>>
-) => {
-  const service = usersService.getById(id);
-  const response = await callEndpoint(service);
-  reset(fromUserResponseDtoToUserFormEntityAdapter(response.data));
-};
-
-export const updateUser = async (
-  id: number,
-  data: UserFormEntity,
-  callEndpoint: (
-    axiosCall: AxiosCall<UserUpdateDto>
-  ) => Promise<AxiosResponse<any, any>>
-) => {
-  const service = usersService.update(
-    id,
-    fromUserFormEntityToUserUpdateDtoAdapter(data)
-  );
-  await callEndpoint(service);
-  createPopUpSimple("El usuario actualizado");
-};
+import { LoggerUtil } from "../../../../utils/logger.util";
 
 export const updateUserPassword = async (
   id: number,
@@ -67,3 +39,36 @@ export const updateUserPassword = async (
   createPopUpSimple("La contraseña ha sido cambiada");
   reset();
 };
+
+export class UserUpdateFormApplication {
+  constructor(
+    private userId: number,
+    private reset: UseFormReset<UserFormEntity>,
+    private callEndpoint: (
+      axiosCall: AxiosCall<any>
+    ) => Promise<AxiosResponse<any, any>>
+  ) {}
+
+  async fillUserForm() {
+    try {
+      const service = usersService.getById(this.userId);
+      const response = await this.callEndpoint(service);
+      this.reset(fromUserResponseDtoToUserFormEntityAdapter(response.data));
+    } catch (error) {
+      LoggerUtil.logError(error);
+    }
+  }
+
+  async handleSubmit(data: UserFormEntity) {
+    try {
+      const service = usersService.update(
+        this.userId,
+        fromUserFormEntityToUserUpdateDtoAdapter(data)
+      );
+      await this.callEndpoint(service);
+      createPopUpSimple("El usuario actualizado");
+    } catch (error) {
+      LoggerUtil.logError(error);
+    }
+  }
+}
