@@ -4,5 +4,5 @@ export const createLoginAdapter = (
   email: string,
   password: string
 ): LoginRequestDto => {
-  return { email, password };
+  return { emailOrUsername: email, password };
 };
