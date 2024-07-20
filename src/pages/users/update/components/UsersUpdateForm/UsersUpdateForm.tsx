@@ -27,15 +27,15 @@ export const UsersUpdateForm = () => {
     callEndpoint
   );
 
-  useEffect(()=>{
+  useEffect(() => {
     application.fillUserForm();
-  },[])
+  }, []);
 
   return (
     <div>
       <h2>Datos generales</h2>
       <FormContainer
-        onSubmit={handleSubmit(application.handleSubmit)}
+        onSubmit={handleSubmit(application.handleSubmit.bind(application))}
         fields={useMemo(() => getUsersUpdateFormFields(register), [])}
       >
         <Button text="Guardar" type="submit" />
