@@ -14,7 +14,6 @@ import { UserFormEntity } from "../entities/user-form.entity";
 import { UserFormPasswordEntity } from "../entities/user-form-password.entity";
 import { UserUpdatePasswordDto } from "../../../../dtos/user-update-password.dto";
 import { fromUserFormPasswordEntityToUserUpdatePasswordDtoAdapter } from "../../adapters/from-user-form-password-entity-to-user-update-password-dto.adapter";
-import { LoggerUtil } from "../../../../utils/logger.util";
 
 export const updateUserPassword = async (
   id: number,
@@ -50,25 +49,43 @@ export class UserUpdateFormApplication {
   ) {}
 
   async fillUserForm() {
-    try {
-      const service = usersService.getById(this.userId);
-      const response = await this.callEndpoint(service);
-      this.reset(fromUserResponseDtoToUserFormEntityAdapter(response.data));
-    } catch (error) {
-      LoggerUtil.logError(error);
-    }
+    const service = usersService.getById(this.userId);
+    const response = await this.callEndpoint(service);
+    this.reset(fromUserResponseDtoToUserFormEntityAdapter(response.data));
   }
 
   async handleSubmit(data: UserFormEntity) {
-    try {
-      const service = usersService.update(
-        this.userId,
-        fromUserFormEntityToUserUpdateDtoAdapter(data)
-      );
-      await this.callEndpoint(service);
-      createPopUpSimple("El usuario actualizado");
-    } catch (error) {
-      LoggerUtil.logError(error);
-    }
+    const service = usersService.update(
+      this.userId,
+      fromUserFormEntityToUserUpdateDtoAdapter(data)
+    );
+    await this.callEndpoint(service);
+    createPopUpSimple("El usuario actualizado");
+  }
+}
+
+export class UserUpdateFormPasswordApplication {
+  constructor(
+    private userId: number,
+    private reset: UseFormReset<UserFormPasswordEntity>,
+    private callEndpoint: (
+      axiosCall: AxiosCall<any>
+    ) => Promise<AxiosResponse<any, any>>
+  ) {}
+
+  async handleSubmit(data: UserFormPasswordEntity) {
+    const confirmed = await createPopUpQuestion(
+      "¿Estás seguro de cambiar la contraseña?"
+    );
+
+    if (!confirmed) return;
+    const service = usersService.updatePassword(
+      this.userId,
+      fromUserFormPasswordEntityToUserUpdatePasswordDtoAdapter(data)
+    );
+    await this.callEndpoint(service);
+
+    createPopUpSimple("La contraseña ha sido cambiada");
+    this.reset();
   }
 }

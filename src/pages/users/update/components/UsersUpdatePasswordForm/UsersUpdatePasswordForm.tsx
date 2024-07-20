@@ -10,8 +10,7 @@ import { LoginResponseEntity } from "../../../../../entities";
 
 import { UserFormPasswordEntity } from "../../entities/user-form-password.entity";
 import { getUsersUpdatePasswordFormFields } from "./users-update-password-form-field";
-import { updateUserPassword } from "../../application/users-update.application";
-import { LoggerUtil } from "../../../../../utils/logger.util";
+import { UserUpdateFormPasswordApplication } from "../../application/users-update.application";
 
 export const UsersUpdatePasswordForm = () => {
   const { setLoading } = useContext(UsersUpdateContext);
@@ -25,23 +24,21 @@ export const UsersUpdatePasswordForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm<UserFormPasswordEntity>();
 
-  const onSubmit = (data: UserFormPasswordEntity) => {
-    try {
-      updateUserPassword(user.id, data, callEndpoint, reset);
-    } catch (error) {
-      LoggerUtil.logError(error);
-    }
-  };
+  const application = new UserUpdateFormPasswordApplication(
+    user.id,
+    reset,
+    callEndpoint
+  );
 
   return (
     <div>
       <h2>Actualizar contraseña</h2>
       <FormContainer
         fields={useMemo(() => getUsersUpdatePasswordFormFields(register), [])}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(application.handleSubmit.bind(application))}
         errors={errors}
       >
         <Button text="Cambiar contraseña" type="submit" />
