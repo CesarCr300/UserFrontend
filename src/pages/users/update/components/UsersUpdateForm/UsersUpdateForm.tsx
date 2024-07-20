@@ -6,12 +6,12 @@ import { Button } from "../../../../../components/Button";
 import { FormContainer } from "../../../../../components/Form/FormContainer";
 import useFetchAndLoad from "../../../../../hooks/useFetchAndLoad";
 import { LoginResponseEntity } from "../../../../../entities";
+import { LoggerUtil } from "../../../../../utils/logger.util";
 
 import { UserFormEntity } from "../../entities/user-form.entity";
 import { UsersUpdateContext } from "../../context/UsersUpdate.context";
-import { fillUserForm } from "../../application/users-update.application";
+import { fillUserForm, updateUser } from "../../application/users-update.application";
 import { getUsersUpdateFormFields } from "./users-update-form-field";
-import { LoggerUtil } from "../../../../../utils/logger.util";
 
 export const UsersUpdateForm = () => {
   const { setLoading } = useContext(UsersUpdateContext);
@@ -22,7 +22,13 @@ export const UsersUpdateForm = () => {
   const { handleSubmit, register, reset } = useForm<UserFormEntity>();
   const { callEndpoint } = useFetchAndLoad(setLoading);
 
-  const onSubmit: SubmitHandler<UserFormEntity> = (data) => {};
+  const onSubmit: SubmitHandler<UserFormEntity> = (data) => {
+    try {
+      updateUser(user.id, data, callEndpoint);
+    } catch (error) {
+      LoggerUtil.logError(error);
+    }
+  };
 
   useEffect(() => {
     try {
