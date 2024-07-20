@@ -12,6 +12,13 @@ export const getUsersRegisterFormFields = (
       type: "text",
       register,
       hasAsyncronousDefaultValue: false,
+      registerOptions: {
+        required: "Este campo es requerido",
+        pattern: {
+          value: /\S+@\S+\.\S+/,
+          message: "Correo electrónico inválido",
+        },
+      },
     },
     {
       label: "Nombre de usuario",
@@ -19,6 +26,13 @@ export const getUsersRegisterFormFields = (
       type: "text",
       register,
       hasAsyncronousDefaultValue: false,
+      registerOptions: {
+        required: "Este campo es requerido",
+        minLength: {
+          value: 4,
+          message: "El nombre de usuario debe tener al menos 4 caracteres",
+        },
+      },
     },
     {
       label: "Contraseña",
@@ -26,6 +40,13 @@ export const getUsersRegisterFormFields = (
       type: "password",
       register,
       hasAsyncronousDefaultValue: false,
+      registerOptions: {
+        required: "Este campo es requerido",
+        minLength: {
+          value: 6,
+          message: "La contraseña debe tener al menos 6 caracteres",
+        },
+      },
     },
     {
       label: "Nombres",
@@ -33,6 +54,9 @@ export const getUsersRegisterFormFields = (
       type: "text",
       register,
       hasAsyncronousDefaultValue: false,
+      registerOptions: {
+        required: "Este campo es requerido",
+      },
     },
     {
       label: "Apellidos",
@@ -40,6 +64,9 @@ export const getUsersRegisterFormFields = (
       type: "text",
       register,
       hasAsyncronousDefaultValue: false,
+      registerOptions: {
+        required: "Este campo es requerido",
+      },
     },
   ];
 };

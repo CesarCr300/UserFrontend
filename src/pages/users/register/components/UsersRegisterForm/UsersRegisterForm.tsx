@@ -14,7 +14,13 @@ export const UsersRegisterForm = () => {
   const { callEndpoint } = useFetchAndLoad(setLoading);
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm<UserRegisterFormEntity>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserRegisterFormEntity>({
+    mode: "onBlur",
+  });
 
   const application = new UsersRegisterApplication(callEndpoint, navigate);
 
@@ -22,6 +28,7 @@ export const UsersRegisterForm = () => {
     <FormContainer
       fields={getUsersRegisterFormFields(register)}
       onSubmit={handleSubmit(application.handleSubmit.bind(application))}
+      errors={errors}
     >
       <Button text="Registrar" type="submit" />
     </FormContainer>
