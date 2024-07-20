@@ -1,0 +1,10 @@
+.git
+.vscode
+.dockerignore
+.gitignore
+config
+dist
+node_modules
+docker-compose.dev.yaml
+Dockerfile
+README.md

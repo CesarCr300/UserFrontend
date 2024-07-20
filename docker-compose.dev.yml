@@ -1,0 +1,22 @@
+# docker-compose.yml
+
+version: "3"
+services:
+  app:
+    environment:
+      - PORT=${VITE_PORT}
+    build:
+      dockerfile: dev.Dockerfile
+      args: 
+        PORT: ${VITE_PORT}
+    ports:
+      - "${VITE_PORT}:${VITE_PORT}"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    deploy:
+      resources:
+        limits:
+          memory: '1000M'
+        reservations:
+          memory: '500M'
