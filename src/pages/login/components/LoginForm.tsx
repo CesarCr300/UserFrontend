@@ -11,6 +11,8 @@ import { LoginContext } from "../context/login.context";
 
 import { LoginEntity } from "../entities/login.entity";
 import { LoginApplication } from "../application/login.application";
+import { CustomeLink } from "../../../components/CustomeLink";
+import { routes } from "../../../variables/routes.variables";
 
 export const LoginForm = () => {
   const { setLoading } = useContext(LoginContext);
@@ -67,6 +69,10 @@ export const LoginForm = () => {
           <Button text="Ingresar" type="submit" />
         </Box>
       </form>
+      <CustomeLink
+        to={routes.register}
+        text="¿No tienes una cuenta? Presiona aquí para registrarte"
+      />
     </Box>
   );
 };
