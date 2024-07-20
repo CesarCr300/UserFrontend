@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { useUserSelector } from "../../../../../redux/user.hooks";
@@ -10,8 +10,9 @@ import { LoggerUtil } from "../../../../../utils/logger.util";
 
 import { UserFormEntity } from "../../entities/user-form.entity";
 import { UsersUpdateContext } from "../../context/UsersUpdate.context";
-import { fillUserForm, updateUser } from "../../application/users-update.application";
+import { updateUser } from "../../application/users-update.application";
 import { getUsersUpdateFormFields } from "./users-update-form-field";
+import { useFillUserForm } from "../../hooks/useFillUserForm";
 
 export const UsersUpdateForm = () => {
   const { setLoading } = useContext(UsersUpdateContext);
@@ -30,13 +31,7 @@ export const UsersUpdateForm = () => {
     }
   };
 
-  useEffect(() => {
-    try {
-      fillUserForm(user.id, reset, callEndpoint);
-    } catch (error) {
-      LoggerUtil.logError(error);
-    }
-  }, []);
+  useFillUserForm({ reset, callEndpoint });
 
   return (
     <FormContainer
